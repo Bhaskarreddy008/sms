@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Management System</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f2f6ff;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #4e73df, #6f42c1);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin-bottom: 8px;
+        }
+
+        /* Container */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        /* Cards */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            color: #4e73df;
+            font-size: 30px;
+        }
+
+        .card p {
+            margin-top: 8px;
+            color: #555;
+        }
+
+        /* Form */
+        .form-section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .form-section h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4e73df;
+        }
+
+        button {
+            border: none;
+            padding: 12px 20px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 15px;
+            color: white;
+        }
+
+        .add-btn {
+            background: #4e73df;
+            margin-top: 15px;
+        }
+
+        .add-btn:hover {
+            background: #2e59d9;
+        }
+
+        /* Student Table */
+        .table-section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .table-header h2 {
+            color: #333;
+        }
+
+        .search {
+            width: 250px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #4e73df;
+            color: white;
+            padding: 14px;
+            text-align: left;
+        }
+
+        td {
+            padding: 13px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background: #f5f7ff;
+        }
+
+        .edit-btn {
+            background: #f6c23e;
+            margin-right: 5px;
+        }
+
+        .delete-btn {
+            background: #e74a3b;
+        }
+
+        .edit-btn:hover {
+            background: #dda20a;
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            background: #343a40;
+            color: white;
+        }
+
+        /* Responsive */
+        @media(max-width: 800px) {
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .table-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .search {
+                width: 100%;
+            }
+
+            table {
+                font-size: 13px;
+            }
+        }
+
+        @media(max-width: 500px) {
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                width: 95%;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+        <h1>Student Management System</h1>
+        <p>Manage student information easily</p>
+    </header>
+
+
+    <div class="container">
+
+        <!-- Dashboard Cards -->
+        <div class="cards">
+
+            <div class="card">
+                <h2 id="totalStudents">0</h2>
+                <p>Total Students</p>
+            </div>
+
+            <div class="card">
+                <h2 id="maleStudents">0</h2>
+                <p>Male Students</p>
+            </div>
+
+            <div class="card">
+                <h2 id="femaleStudents">0</h2>
+                <p>Female Students</p>
+            </div>
+
+            <div class="card">
+                <h2 id="departmentCount">0</h2>
+                <p>Departments</p>
+            </div>
+
+        </div>
+
+
+        <!-- Add Student Form -->
+        <div class="form-section">
+
+            <h2>Add Student</h2>
+
+            <div class="form-grid">
+
+                <input type="text"
+                       id="studentName"
+                       placeholder="Student Name">
+
+                <input type="text"
+                       id="studentId"
+                       placeholder="Student ID">
+
+                <input type="email"
+                       id="email"
+                       placeholder="Email">
+
+                <input type="number"
+                       id="age"
+                       placeholder="Age">
+
+                <select id="gender">
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+
+                <select id="department">
+                    <option value="">Select Department</option>
+                    <option value="CSE">CSE</option>
+                    <option value="ECE">ECE</option>
+                    <option value="EEE">EEE</option>
+                    <option value="MECH">MECH</option>
+                    <option value="CIVIL">CIVIL</option>
+                </select>
+
+            </div>
+
+            <button class="add-btn" onclick="addStudent()">
+                Add Student
+            </button>
+
+        </div>
+
+
+        <!-- Student Table -->
+        <div class="table-section">
+
+            <div class="table-header">
+
+                <h2>Student Details</h2>
+
+                <input
+                    class="search"
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search student..."
+                    onkeyup="searchStudent()">
+
+            </div>
+
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>S.No</th>
+                        <th>Student ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th>Department</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="studentTable">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <footer>
+        <p>© 2026 Student Management System</p>
+    </footer>
+
+
+    <script>
+
+        let students = [
+            {
+                id: "ST101",
+                name: "Rahul",
+                email: "rahul@gmail.com",
+                age: 20,
+                gender: "Male",
+                department: "CSE"
+            },
+
+            {
+                id: "ST102",
+                name: "Priya",
+                email: "priya@gmail.com",
+                age: 21,
+                gender: "Female",
+                department: "ECE"
+            },
+
+            {
+                id: "ST103",
+                name: "Arjun",
+                email: "arjun@gmail.com",
+                age: 20,
+                gender: "Male",
+                department: "CSE"
+            }
+        ];
+
+
+        // Display Students
+        function displayStudents(data = students) {
+
+            let table = document.getElementById("studentTable");
+
+            table.innerHTML = "";
+
+            data.forEach((student, index) => {
+
+                table.innerHTML += `
+                    <tr>
+
+                        <td>${index + 1}</td>
+
+                        <td>${student.id}</td>
+
+                        <td>${student.name}</td>
+
+                        <td>${student.email}</td>
+
+                        <td>${student.age}</td>
+
+                        <td>${student.gender}</td>
+
+                        <td>${student.department}</td>
+
+                        <td>
+
+                            <button
+                                class="edit-btn"
+                                onclick="editStudent(${index})">
+                                Edit
+                            </button>
+
+                            <button
+                                class="delete-btn"
+                                onclick="deleteStudent(${index})">
+                                Delete
+                            </button>
+
+                        </td>
+
+                    </tr>
+                `;
+            });
+
+            updateDashboard();
+        }
+
+
+        // Add Student
+        function addStudent() {
+
+            let name = document.getElementById("studentName").value;
+            let id = document.getElementById("studentId").value;
+            let email = document.getElementById("email").value;
+            let age = document.getElementById("age").value;
+            let gender = document.getElementById("gender").value;
+            let department = document.getElementById("department").value;
+
+
+            if (
+                name === "" ||
+                id === "" ||
+                email === "" ||
+                age === "" ||
+                gender === "" ||
+                department === ""
+            ) {
+
+                alert("Please fill all fields");
+
+                return;
+            }
+
+
+            let student = {
+
+                id: id,
+                name: name,
+                email: email,
+                age: age,
+                gender: gender,
+                department: department
+
+            };
+
+
+            students.push(student);
+
+            displayStudents();
+
+            clearForm();
+
+            alert("Student added successfully!");
+
+        }
+
+
+        // Delete Student
+        function deleteStudent(index) {
+
+            if (confirm("Are you sure you want to delete this student?")) {
+
+                students.splice(index, 1);
+
+                displayStudents();
+
+            }
+
+        }
+
+
+        // Edit Student
+        function editStudent(index) {
+
+            let student = students[index];
+
+            document.getElementById("studentName").value = student.name;
+            document.getElementById("studentId").value = student.id;
+            document.getElementById("email").value = student.email;
+            document.getElementById("age").value = student.age;
+            document.getElementById("gender").value = student.gender;
+            document.getElementById("department").value = student.department;
+
+
+            students.splice(index, 1);
+
+            displayStudents();
+
+        }
+
+
+        // Clear Form
+        function clearForm() {
+
+            document.getElementById("studentName").value = "";
+            document.getElementById("studentId").value = "";
+            document.getElementById("email").value = "";
+            document.getElementById("age").value = "";
+            document.getElementById("gender").value = "";
+            document.getElementById("department").value = "";
+
+        }
+
+
+        // Search Student
+        function searchStudent() {
+
+            let search =
+                document
+                .getElementById("searchInput")
+                .value
+                .toLowerCase();
+
+
+            let filteredStudents = students.filter(student =>
+
+                student.name.toLowerCase().includes(search) ||
+
+                student.id.toLowerCase().includes(search) ||
+
+                student.department.toLowerCase().includes(search)
+
+            );
+
+
+            displayStudents(filteredStudents);
+
+        }
+
+
+        // Dashboard
+        function updateDashboard() {
+
+            document.getElementById("totalStudents").innerText =
+                students.length;
+
+
+            document.getElementById("maleStudents").innerText =
+                students.filter(student =>
+                    student.gender === "Male"
+                ).length;
+
+
+            document.getElementById("femaleStudents").innerText =
+                students.filter(student =>
+                    student.gender === "Female"
+                ).length;
+
+
+            let departments = new Set(
+                students.map(student =>
+                    student.department
+                )
+            );
+
+
+            document.getElementById("departmentCount").innerText =
+                departments.size;
+
+        }
+
+
+        // Initial Display
+        displayStudents();
+
+    </script>
+
+</body>
+</html>
